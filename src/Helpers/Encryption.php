@@ -1,6 +1,6 @@
 <?php
 
-namespace rahmadArif\PanelComposerPackages\Helpers;
+namespace rhmdarif\Library\Helpers;
 
 class Encryption
 {

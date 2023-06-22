@@ -1,15 +1,15 @@
 {
-    "name": "rahmad_arif/panel-composer-packages",
-    "description": "Trying create a package",
+    "name": "rhmdarif/library",
+    "description": "All of personal library",
     "type": "library",
     "autoload": {
         "psr-4": {
-            "rahmadArif\\PanelComposerPackages\\": "src/"
+            "rhmdarif\\Library\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "rahmadArif\\PanelComposerPackages\\Tests\\": "tests/"
+            "rhmdarif\\Library\\Tests\\": "tests/"
         }
     },
     "authors": [

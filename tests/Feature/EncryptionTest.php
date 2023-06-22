@@ -1,8 +1,8 @@
 <?php
-namespace rahmadArif\PanelComposerPackages\Tests;
+namespace rhmdarif\Library\Tests;
 
 use Orchestra\Testbench\TestCase;
-use rahmadArif\PanelComposerPackages\Helpers\Encryption;
+use rhmdarif\Library\Helpers\Encryption;
 
 class EncryptionTest extends TestCase
 {

@@ -1,5 +1,5 @@
 <?php
-namespace rahmadArif\PanelComposerPackages\Tests;
+namespace rhmdarif\Library\Tests;
 
 use Orchestra\Testbench\TestCase;
 
