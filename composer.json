@@ -5,7 +5,10 @@
     "autoload": {
         "psr-4": {
             "rhmdarif\\Library\\": "src/"
-        }
+        },
+        "files": [
+            "app/Helpers/functions.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
