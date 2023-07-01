@@ -11,16 +11,22 @@ use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Lib\WhatsappController;
+use rhmdarif\Library\Helpers\Log;
 
-if (!function_exists("current_agent")) {
-    function current_agent()
+if (!function_exists("format_rupiah")) {
+    function format_rupiah($angka, $prefix="Rp ", $decimal=0)
     {
-        if(auth()->check()) return auth()->user();
-
-        $token = PersonalAccessToken::findToken(Session::get("agent.token"));
-        if ($token == null) return null;
-        $user = $token->tokenable;
-        return $user;
+        $hasil_rupiah = $prefix. number_format($angka,$decimal,',','.');
+        return $hasil_rupiah;
+    }
+}
+if (!function_exists("date_modif")) {
+    function date_modif($before, $commad, $format='')
+    {
+        $new_time = strtotime($commad, strtotime( $before ));
+        if($format == '') return $new_time;
+        
+        return date($format, $new_time);
     }
 }
 if (!function_exists("get_number_jid")) {
@@ -50,140 +56,11 @@ if (!function_exists("send_to_webhook")) {
         ]);
         if ($validator->fails()) return false;
 
-        LogHelpers::store("helpersFunction", __FUNCTION__, __LINE__, $datas['webhook_url'], $datas);
+        Log::store("helpersFunction", __FUNCTION__, __LINE__, $datas['webhook_url'], $datas);
 
         $datas['datas']['timeStamp'] = time();
         Http::post($datas['webhook_url'], $datas['datas']);
         return true;
-    }
-}
-
-if (!function_exists("fetch_scenario_lists")) {
-    function fetch_scenario_lists(BotScenario $bot_scenario)
-    {
-        $result = '
-        <div class="card border shadow-none">
-            <div class="card-body p-4">
-                <div class="d-flex align-items-start">
-                    <div class="flex-grow-1 overflow-hidden">
-                        <h5 class="font-size-15 mb-1 text-truncate text-dark">
-                         ' . ($bot_scenario->message ?? '-') . ' (Id : #' . $bot_scenario->id . ')
-                        </h5>
-                        <p class="text-muted text-truncate mb-0">
-                            ' . (($bot_scenario->bot_scenario_id != null) ? '(Parent Id : #' . $bot_scenario->bot_scenario_id . ')' : '') . '
-                        </p>
-                    </div>
-                    <div class="flex-shrink-0 dropdown">
-                        <a class="text-body dropdown-toggle font-size-16" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal icon-xs"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="javascript:scenarioEdit(' . $bot_scenario->id . ')">Edit</a>
-                            <a class="dropdown-item" href="javascript:scenarioDelete(' . $bot_scenario->id . ')">Delete</a>
-                            <hr class="dropdown-divider">
-                            <a class="dropdown-item" href="javascript:scenarioCreate(' . $bot_scenario->bot_id . ', ' . $bot_scenario->id . ')">Create Child</a>
-                            <hr class="dropdown-divider">
-                            <a class="dropdown-item" href="javascript:replyCreate(' . $bot_scenario->id . ')">Create Response</a>
-                        </div>
-                    </div><!-- end dropdown -->
-                </div>
-            </div>
-            <!-- end card body -->
-            <div class="btn-group btn-icon" role="group">';
-
-        // Tombol child
-        if ($bot_scenario->bot_scenarios->count() == 0) {
-            $result .= '<button type="button" class="btn btn-outline-light text-dark" data-bs-toggle="collapse">Childs</button>';
-        } else {
-            $result .= '<button type="button" class="btn btn-outline-light text-dark" data-bs-toggle="collapse"
-                data-bs-target="#childs-' . $bot_scenario->id . '"
-                aria-expanded="false" aria-controls="collapseExample">Childs ( ' . $bot_scenario->bot_scenarios->count() . ' )</button>';
-        }
-
-        // Tombol Response
-        $result .= '<button type="button" class="btn btn-outline-light text-dark" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Message" onclick="showResponse(' . $bot_scenario->id . ')">Response</button>';
-
-        $result .= '
-            </div>
-        </div>';
-
-        if ($bot_scenario->bot_scenarios->count() > 0) {
-            $result .= '<div class="collapse p-0" id="childs-' . $bot_scenario->id . '">';
-        }
-
-        foreach ($bot_scenario->bot_scenarios as $bot_scenario_child) {
-            $result .= fetch_scenario_lists($bot_scenario_child);
-        }
-
-        if ($bot_scenario->bot_scenarios->count() > 0) {
-            $result .= '</div>';
-        }
-
-
-        return $result;
-    }
-}
-
-if (!function_exists("fetch_campaign_scenario_lists")) {
-    function fetch_campaign_scenario_lists(BotCampaignScenario $bot_scenario)
-    {
-        $result = '
-        <div class="card border shadow-none">
-            <div class="card-body p-4">
-                <div class="d-flex align-items-start">
-                    <div class="flex-grow-1 overflow-hidden">
-                        <h5 class="font-size-15 mb-1 text-truncate text-dark">
-                         ' . ($bot_scenario->message ?? '-') . ' (Id : #' . $bot_scenario->id . ')
-                        </h5>
-                        <p class="text-muted text-truncate mb-0">
-                            ' . (($bot_scenario->bot_scenario_id != null) ? '(Parent Id : #' . $bot_scenario->bot_scenario_id . ')' : '') . '
-                        </p>
-                    </div>
-                    <div class="flex-shrink-0 dropdown">
-                        <a class="text-body dropdown-toggle font-size-16" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal icon-xs"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="javascript:scenarioEdit(' . $bot_scenario->id . ')">Edit</a>
-                            <a class="dropdown-item" href="javascript:scenarioDelete(' . $bot_scenario->id . ')">Delete</a>
-                            <hr class="dropdown-divider">
-                            <a class="dropdown-item" href="javascript:scenarioCreate(' . $bot_scenario->bot_campaign_id . ', ' . $bot_scenario->id . ')">Create Child</a>
-                        </div>
-                    </div><!-- end dropdown -->
-                </div>
-            </div>
-            <!-- end card body -->
-            <div class="btn-group btn-icon" role="group">';
-
-        // Tombol child
-        if ($bot_scenario->bot_scenarios->count() == 0) {
-            $result .= '<button type="button" class="btn btn-outline-light text-dark" data-bs-toggle="collapse">Childs</button>';
-        } else {
-            $result .= '<button type="button" class="btn btn-outline-light text-dark" data-bs-toggle="collapse"
-                data-bs-target="#childs-' . $bot_scenario->id . '"
-                aria-expanded="false" aria-controls="collapseExample">Childs ( ' . $bot_scenario->bot_scenarios->count() . ' )</button>';
-        }
-
-
-
-        $result .= '
-            </div>
-        </div>';
-
-        if ($bot_scenario->bot_scenarios->count() > 0) {
-            $result .= '<div class="collapse p-0" id="childs-' . $bot_scenario->id . '">';
-        }
-
-        foreach ($bot_scenario->bot_scenarios as $bot_scenario_child) {
-            $result .= fetch_campaign_scenario_lists($bot_scenario_child);
-        }
-
-        if ($bot_scenario->bot_scenarios->count() > 0) {
-            $result .= '</div>';
-        }
-
-
-        return $result;
     }
 }
 
