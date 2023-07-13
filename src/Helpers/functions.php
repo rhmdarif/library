@@ -42,7 +42,7 @@ if (!function_exists("phone_enam_dua")) {
     function phone_enam_dua($number)
     {
         $number = (int) get_number_jid($number);
-        if (substr($number, 0, 1) == "8") $number = "62" . ((int) $number);
+        if (substr($number, 0, 2) != "62") $number = "62" . ((int) $number);
         return $number;
     }
 }
