@@ -1,16 +1,9 @@
 <?php
 
-use App\Models\WebConfig;
-use App\Helpers\LogHelpers;
-use App\Models\BotScenario;
-use App\Models\BotCampaignScenario;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\Lib\WhatsappController;
 use rhmdarif\Library\Helpers\Log;
 
 if (!function_exists("format_rupiah")) {
@@ -124,7 +117,7 @@ if (!function_exists("attachment_file_message")) {
 }
 
 
-
+/*
 if(!function_exists('web_config')) {
     function web_config($page, $key)
     {
@@ -145,6 +138,7 @@ if(!function_exists('web_config')) {
         return Cache::get('web-config.'.$page.'.'.$key);
     }
 }
+*/
 
 if(!function_exists('file_upload_exists')) {
     function file_upload_exists($file_path)
@@ -169,5 +163,12 @@ if(!function_exists('show_img')) {
         if(empty($file_path) || (!Storage::exists($file_path) AND !file_exists(public_path($file_path)))) return $default;
 
         return $file_path;
+    }
+}
+
+if (!function_exists("removeKeywordOnString")) {
+    function removeKeywordOnString($real, $remover)
+    {
+        return str_replace($remover, "", $real);
     }
 }
