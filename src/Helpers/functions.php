@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use rhmdarif\Library\Helpers\Log;
+
 define('APACHE_MIME_TYPES_URL', 'http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types');
 
 if (!function_exists("format_rupiah")) {
@@ -183,5 +184,40 @@ if (!function_exists("generateUpToDateMimeArray")) {
                 for ($i = 1; $i < $c; $i++)
                     $s[] = '&nbsp;&nbsp;&nbsp;\'' . $out[1][$i] . '\' => \'' . $out[1][0] . '\'';
         return @sort($s) ? '$mime_types = array(<br />' . implode($s, ',<br />') . '<br />);' : false;
+    }
+}
+
+if (!function_exists("numberToAlphabet")) {
+    function numberToAlphabet($number)
+    {
+        $number = intval($number);
+        if ($number <= 0) {
+            return '';
+        }
+        $alphabet = '';
+        while ($number != 0) {
+            $p = ($number - 1) % 26;
+            $number = intval(($number - $p) / 26);
+            $alphabet = chr(65 + $p) . $alphabet;
+        }
+        return $alphabet;
+    }
+}
+
+if (!function_exists("alphabetToNumber")) {
+
+    function alphabetToNumber($string)
+    {
+        $string = strtoupper($string);
+        $length = strlen($string);
+        $number = 0;
+        $level = 1;
+        while ($length >= $level) {
+            $char = $string[$length - $level];
+            $c = ord($char) - 64;
+            $number += $c * (26 ** ($level - 1));
+            $level++;
+        }
+        return $number;
     }
 }
