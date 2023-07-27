@@ -155,14 +155,14 @@ if (!function_exists('file_upload_exists')) {
 
 
 if (!function_exists('show_img')) {
-    function show_img($file_path, $default = 'https://via.placeholder.com/300x300.png?text=empty')
+    function show_img($file_path, $default='https://via.placeholder.com/300x300.png?text=empty')
     {
         $file_path = (is_string($file_path)) ? $file_path : "";
 
         if (filter_var($file_path, FILTER_VALIDATE_URL)) return $file_path;
         if (!empty($file_path) && Storage::exists($file_path)) return Storage::url($file_path);
         if (!empty($file_path) && file_exists(public_path($file_path))) return asset($file_path);
-        if (empty($file_path) || (!Storage::exists($file_path) and !file_exists(public_path($file_path)))) return $default;
+        if ($default != null && (empty($file_path) || (!Storage::exists($file_path) and !file_exists(public_path($file_path))))) return $default;
 
         return $file_path;
     }
