@@ -27,7 +27,7 @@ class BTAPI {
 			'webname'	=>	'{"domain":"'.$domain.'","domainlist":[],"count":0}',
 			'type'		=> 'PHP',
 			'port'		=> $port,
-			'ps'		=> $domain,
+			'ps'		=> str_replace('.', '_', $domain),
 			'path'		=> $path,
 			'type_id' => 0,
 			'version' => $php_version,
