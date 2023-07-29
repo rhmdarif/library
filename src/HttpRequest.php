@@ -13,7 +13,7 @@ class HttpRequest {
         $this->headers = [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
-            'X-CLIENT-DOMAIN' => request()->getHost()
+            'X-CLIENT-ORIGIN' => request()->getHost()
         ];
     }
 
