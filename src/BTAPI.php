@@ -22,7 +22,8 @@ class BTAPI {
 		$url = $this->BT_PANEL.'/site?action=AddSite';
 		
 		//准备POST数据
-		$p_data = [
+		$p_data_1 = $this->GetKeyData();
+		$p_data_2 = [
 			'webname'	=>	'{"domain":"localhost\r","domainlist":["panel-client.local"],"count":1}',
 			'type'		=> 'PHP',
 			'port'		=> '80',
@@ -38,6 +39,7 @@ class BTAPI {
 			'set_ssl'		=> 0,
 			'force_ssl'	=> 0,
 		];
+		$p_data = array_merge($p_data_1,$p_data_2);
 		
 		//请求面板接口
 		$result = $this->HttpPostCookie($url,$p_data);
