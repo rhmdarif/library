@@ -1,6 +1,6 @@
 <?php
 
-namespace rhmdarif\Library\Helpers;
+namespace rhmdarif\Library;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;

@@ -1,6 +1,6 @@
 <?php
 
-namespace rhmdarif\Library\Helpers;
+namespace rhmdarif\Library;
 
 class Encryption
 {

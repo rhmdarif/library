@@ -2,7 +2,7 @@
 namespace rhmdarif\Library\Tests;
 
 use Orchestra\Testbench\TestCase;
-use rhmdarif\Library\Helpers\Encryption;
+use rhmdarif\Library\Encryption;
 
 class EncryptionTest extends TestCase
 {
