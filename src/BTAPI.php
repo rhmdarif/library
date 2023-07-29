@@ -15,6 +15,37 @@ class BTAPI {
 		if($bt_panel) $this->BT_PANEL = $bt_panel;
 		if($bt_key) $this->BT_KEY = $bt_key;
 	}
+
+	
+	public function AddSite(){
+		//拼接URL地址
+		$url = $this->BT_PANEL.'/data?action=AddSite';
+		
+		//准备POST数据
+		$p_data = [
+			'webname'	=>	'{"domain":"localhost\r","domainlist":["panel-client.local"],"count":1}',
+			'type'		=> 'PHP',
+			'port'		=> '80',
+			'ps'		=> 'localhost',
+			'path'		=> '/',
+			'type_id' => 0,
+			'version' => '74',
+			'ftp'		=> false,
+			'sql'		=> 'MySQL',
+			'datauser'	=> 'sql_localhost',
+			'datapassword'	=> 'AcTbDemyfFGASkmF',
+			'codeing'		=> 'utf8',
+			'set_ssl'		=> 0,
+			'force_ssl'	=> 0,
+		];
+		
+		//请求面板接口
+		$result = $this->HttpPostCookie($url,$p_data);
+		
+		//解析JSON数据
+		$data = json_decode($result,true);
+      	return $data;
+	}
 	
   	//示例取面板日志	
 	public function GetLogs(){
