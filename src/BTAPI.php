@@ -28,7 +28,7 @@ class BTAPI {
 			'type'		=> 'PHP',
 			'port'		=> '80',
 			'ps'		=> 'localhost',
-			'path'		=> '/',
+			'path'		=> '/www/wwwroot/localhost',
 			'type_id' => 0,
 			'version' => '74',
 			'ftp'		=> false,
