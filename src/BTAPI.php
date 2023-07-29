@@ -19,7 +19,7 @@ class BTAPI {
 	
 	public function AddSite(){
 		//拼接URL地址
-		$url = $this->BT_PANEL.'/data?action=AddSite';
+		$url = $this->BT_PANEL.'/site?action=AddSite';
 		
 		//准备POST数据
 		$p_data = [
