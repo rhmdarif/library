@@ -9,7 +9,7 @@ class HttpRequest {
 
     public function __construct($url, $license_key)
     {
-        $this->client = Http::baseUrl($url)->withToken($license_key);
+        $this->client = Http::baseUrl($url)->withToken($license_key)->withoutVerifying();
         $this->headers = [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
