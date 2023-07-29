@@ -17,27 +17,27 @@ class BTAPI {
 	}
 
 	
-	public function AddSite(){
+	public function AddSite($domain, $port='80', $path, $php_version, $ftp=false, $sql='MySQL', $sql_datauser, $sql_datapassword, $set_ssl=0, $force_ssl=0){
 		//拼接URL地址
 		$url = $this->BT_PANEL.'/site?action=AddSite';
 		
 		//准备POST数据
 		$p_data_1 = $this->GetKeyData();
 		$p_data_2 = [
-			'webname'	=>	'{"domain":"localhost\r","domainlist":["panel-client.local"],"count":1}',
+			'webname'	=>	'{"domain":"'.$domain.'","domainlist":[],"count":0}',
 			'type'		=> 'PHP',
-			'port'		=> '80',
-			'ps'		=> 'localhost',
-			'path'		=> '/www/wwwroot/localhost',
+			'port'		=> $port,
+			'ps'		=> $domain,
+			'path'		=> $path,
 			'type_id' => 0,
-			'version' => '74',
-			'ftp'		=> false,
-			'sql'		=> 'MySQL',
-			'datauser'	=> 'sql_localhost',
-			'datapassword'	=> 'AcTbDemyfFGASkmF',
+			'version' => $php_version,
+			'ftp'		=> $ftp,
+			'sql'		=> $sql,
+			'datauser'	=> $sql_datauser,
+			'datapassword'	=> $sql_datapassword,
 			'codeing'		=> 'utf8',
-			'set_ssl'		=> 0,
-			'force_ssl'	=> 0,
+			'set_ssl'		=> $set_ssl,
+			'force_ssl'	=> $force_ssl,
 		];
 		$p_data = array_merge($p_data_1,$p_data_2);
 		
