@@ -52,7 +52,7 @@ class BTAPI
 		return $data;
 	}
 
-	public function searchSite($domain, int $key = null)
+	public function searchSite($domain, $key = null)
 	{
 		$url = $this->BT_PANEL . '/data?action=getData';
 
@@ -68,24 +68,28 @@ class BTAPI
 
 		$result = $this->HttpPostCookie($url, $p_data);
 		$data = json_decode($result, true);
-		return ($key == null) ? $data['data'] : $data['data'][$key];
+		return (is_numeric($key)) ? $data['data'][$key] : $data['data'];
 	}
 
 	public function SiteStatus($domain)
 	{
 		$search = $this->searchSite($domain, 0);
-		$type = ($search['status'] == "0") ? "SiteStop" : "SiteStart";
-		$url = $this->BT_PANEL . '/site?action=' . $type;
+        if(isset($search['status'])) {
+            $type = ($search['status'] == "0") ? "SiteStart" : "SiteStop";
+            $url = $this->BT_PANEL . '/site?action=' . $type;
 
-		$p_data_1 = $this->GetKeyData();
-		$p_data_2 = [
-			'id' => $search['id'],
-			'name' => $search['name'],
-		];
-		$p_data = array_merge($p_data_1, $p_data_2);
+            $p_data_1 = $this->GetKeyData();
+            $p_data_2 = [
+                'id' => $search['id'],
+                'name' => $search['name'],
+            ];
+            $p_data = array_merge($p_data_1, $p_data_2);
 
-		$result = $this->HttpPostCookie($url, $p_data);
-		$data = json_decode($result, true);
+            $result = $this->HttpPostCookie($url, $p_data);
+            $data = json_decode($result, true);
+        } else {
+            $data = [];
+        }
 		return $data;
 	}
 
